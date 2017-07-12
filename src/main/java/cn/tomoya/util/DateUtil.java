@@ -1,6 +1,7 @@
 package cn.tomoya.util;
 
-import org.springframework.stereotype.Component;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
 
 import java.text.ParseException;
@@ -12,6 +13,8 @@ import java.util.Date;
  */
 public class DateUtil {
 
+  static Logger log = LoggerFactory.getLogger(DateUtil.class);
+
   public static final String DATEFORMATSTYLE = "yyyy-MM-dd";
   public static final String DATETIMEFORMATSTYLE = "yyyy-MM-dd HH:mm:ss";
 
@@ -22,7 +25,7 @@ public class DateUtil {
     try {
       date = strToDate.parse(dateString);
     } catch (ParseException e) {
-      e.printStackTrace();
+      log.error(e.getMessage());
     }
     return date;
   }

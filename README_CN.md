@@ -147,6 +147,7 @@ pyblog使用的模板为freemarker，模板文件放在templates文件夹里
 ```
 templates/
 └── default
+    ├── 404.ftl
     ├── archive.ftl
     ├── category.ftl
     ├── detail.ftl

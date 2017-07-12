@@ -149,6 +149,7 @@ Create a folder, **name can not be default, at the same time application.yml in 
 ```
 templates/
 └── default
+    ├── 404.ftl
     ├── archive.ftl
     ├── category.ftl
     ├── detail.ftl

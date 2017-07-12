@@ -181,7 +181,7 @@ public class FileUtil {
 
           blogs.add(blog);
         } catch (IOException | IllegalArgumentException e) {
-          e.printStackTrace();
+          log.error(e.getMessage());
         }
 
       }

@@ -41,6 +41,7 @@ public class GeneratorHtml {
     generatorCategory();
     generatorDetail();
     generatorArchives();
+    generator404Page();
     log.info("generator over!");
   }
 
@@ -78,7 +79,7 @@ public class GeneratorHtml {
       sw.close();
       outStream.close();
     } catch (IOException | TemplateException e) {
-      e.printStackTrace();
+      log.error(e.getMessage());
     }
   }
 
@@ -104,7 +105,7 @@ public class GeneratorHtml {
         sw.close();
         outStream.close();
       } catch (IOException | TemplateException e) {
-        e.printStackTrace();
+        log.error(e.getMessage());
       }
     }
   }
@@ -128,7 +129,7 @@ public class GeneratorHtml {
       sw.close();
       outStream.close();
     } catch (IOException | TemplateException e) {
-      e.printStackTrace();
+      log.error(e.getMessage());
     }
   }
 
@@ -151,7 +152,7 @@ public class GeneratorHtml {
       sw.close();
       outStream.close();
     } catch (IOException | TemplateException e) {
-      e.printStackTrace();
+      log.error(e.getMessage());
     }
   }
 
@@ -174,7 +175,7 @@ public class GeneratorHtml {
       sw.close();
       outStream.close();
     } catch (IOException | TemplateException e) {
-      e.printStackTrace();
+      log.error(e.getMessage());
     }
   }
 
@@ -205,10 +206,32 @@ public class GeneratorHtml {
           sw.close();
           outStream.close();
         } catch (Exception e) {
-          e.printStackTrace();
+          log.error(e.getMessage());
         }
       }
     }
 
+  }
+
+  public void generator404Page() {
+    try {
+      Template template = configuration.getTemplate(siteConfig.getTheme() + "/404.ftl");
+      fileUtil.mkdir(siteConfig.getStatic_html() + "/archive");
+
+      File staticFile = fileUtil.createFile(siteConfig.getStatic_html() + "/404.html");
+
+      FileOutputStream outStream = new FileOutputStream(staticFile);
+      OutputStreamWriter writer = new OutputStreamWriter(outStream, "UTF-8");
+      BufferedWriter sw = new BufferedWriter(writer);
+
+      Map<String, String> rootMap = new HashMap<>();
+
+      template.process(rootMap, sw);
+      sw.flush();
+      sw.close();
+      outStream.close();
+    } catch (IOException | TemplateException e) {
+      log.error(e.getMessage());
+    }
   }
 }

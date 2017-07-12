@@ -3,7 +3,7 @@ server:
 spring:
   resources:
     static-locations:
-    - file:./_site/
+    - file:./${_site.static_html}/
     - file:./static/
   freemarker:
     template-loader-path:
@@ -14,12 +14,15 @@ _site:
   debug: false
   theme: default
   url: http://localhost:4000
-  page_size: 10
-  title: Tomoya
-  brief_intro: Code, Animation
   permalink: /:year/:month/:day/:title/
-  description_footer: Hello World!
   excerpt_separator: "\n\n\n\n"
+  page_size: 10
+  post: ./_posts
+  static_html: ./_sites
+  base:
+    title: Tomoya
+    brief_intro: Code, Animation
+    description_footer: Hello World!
 #  links:
 #    Github: https://github.com/
 #    Google: https://google.com/
@@ -33,5 +36,3 @@ _site:
 #  comment:
 #    changyan:
 #    disqus:
-  post: ./_posts
-  static_html: ./_site

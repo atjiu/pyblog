@@ -8,9 +8,9 @@
       </#list>
     </p>
   </#if>
-    <#if _site.description_footer?? || _site.contacts??>
+    <#if _site.base.description_footer?? || _site.contacts??>
     <p>
-      ${_site.description_footer!}
+      ${_site.base.description_footer!}
       <#if _site.contacts??>
         Contact me at:
         <#list _site.contacts as key, value>

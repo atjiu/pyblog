@@ -1,5 +1,5 @@
 <#include "layout.ftl">
-<@html title="Archives - " + _site.base.title page_tab=page_tab>
+<@html title="Archives - " + _site.title page_tab=page_tab>
 <div class="panel panel-default">
   <div class="panel-body">
     <@blogs_tag>

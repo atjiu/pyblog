@@ -10,8 +10,8 @@
         <span class="icon-bar"></span>
       </button>
       <a href="/" class="navbar-brand">
-      ${_site.base.title!}
-        <small>${_site.base.brief_intro!}</small>
+      ${_site.title!}
+        <small>${_site.subTitle!}</small>
       </a>
     </div>
     <nav id="bs-navbar" class="collapse navbar-collapse">

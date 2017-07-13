@@ -33,7 +33,7 @@ public class BlogsDirective implements TemplateDirectiveModel {
       environment.setVariable("blogs", builder.build().wrap(fileUtil.getBlogs()));
     } else {
       int pageNo = Integer.parseInt(map.get("pageNo").toString());
-      int pageSize = siteConfig.getPage_size();
+      int pageSize = siteConfig.getPageSize();
       List<Blog> blogs = fileUtil.getBlogs();
 
       int toIndex = (pageNo - 1) * pageSize + pageSize;

@@ -12,17 +12,17 @@ spring:
 
 _site:
   debug: false
+  title: Tomoya's Blog
+  subTitle: Code, Animation
+  description: Record my learning notes
+  author: tomoya
   theme: default
   url: http://localhost:4000
-  permalink: /:year/:month/:day/:title/
-  excerpt_separator: "\n\n\n\n"
-  page_size: 10
+  permaLink: /:year/:month/:day/:title/
+  excerptSeparator: "\n\n\n\n"
+  pageSize: 10
   post: ./_posts
-  static_html: ./_sites
-  base:
-    title: Tomoya
-    brief_intro: Code, Animation
-    description_footer: Hello World!
+  staticHtml: ./_sites
 #  links:
 #    Github: https://github.com/
 #    Google: https://google.com/
@@ -36,3 +36,4 @@ _site:
 #  comment:
 #    changyan:
 #    disqus:
+#  other:

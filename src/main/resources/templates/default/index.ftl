@@ -1,5 +1,5 @@
 <#include "layout.ftl">
-<@html title="Home - " + _site.base.title page_tab=page_tab>
+<@html title="Home - " + _site.title page_tab=page_tab>
   <@blogs_tag pageNo=pageNo>
     <#list page.list as blog>
       <div class="panel panle-default">

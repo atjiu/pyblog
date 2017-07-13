@@ -134,7 +134,7 @@ public class FileUtil {
           }
 
           // set url
-          String permalink = siteConfig.getPermalink();
+          String permalink = siteConfig.getPermaLink();
           String year = DateUtil.formatDate(blog.getDate(), "yyyy");
           String month = DateUtil.formatDate(blog.getDate(), "MM");
           String day = DateUtil.formatDate(blog.getDate(), "dd");
@@ -168,7 +168,7 @@ public class FileUtil {
           }
           blog.setContent(contentBuf.toString());
 
-          String excerpt_separator = siteConfig.getExcerpt_separator();
+          String excerpt_separator = siteConfig.getExcerptSeparator();
           Pattern regex = Pattern.compile(excerpt_separator);
           Matcher regexMatcher = regex.matcher(contentBuf.toString());
           String excerpt;

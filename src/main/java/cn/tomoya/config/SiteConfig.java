@@ -13,48 +13,16 @@ public class SiteConfig {
   private boolean debug;
   private String theme;
   private String url;
-  private int page_size;
-  private String permalink;
-  private String excerpt_separator;
+  private int pageSize;
+  private String permaLink;
+  private String excerptSeparator;
   private String post;
-  private String static_html;
-  private Map<String, Object> base;
+  private String staticHtml;
   private Map<String, Object> links;
   private Map<String, Object> contacts;
   private Map<String, Object> analytics;
   private Map<String, Object> comment;
-
-  public Map<String, Object> getBase() {
-    return base;
-  }
-
-  public void setBase(Map<String, Object> base) {
-    this.base = base;
-  }
-
-  public String getUrl() {
-    return url;
-  }
-
-  public void setUrl(String url) {
-    this.url = url;
-  }
-
-  public Map getAnalytics() {
-    return analytics;
-  }
-
-  public void setAnalytics(Map analytics) {
-    this.analytics = analytics;
-  }
-
-  public Map getComment() {
-    return comment;
-  }
-
-  public void setComment(Map comment) {
-    this.comment = comment;
-  }
+  private Map<String, Object> other;
 
   public boolean isDebug() {
     return debug;
@@ -72,44 +40,36 @@ public class SiteConfig {
     this.theme = theme;
   }
 
-  public int getPage_size() {
-    return page_size;
+  public String getUrl() {
+    return url;
   }
 
-  public void setPage_size(int page_size) {
-    this.page_size = page_size;
+  public void setUrl(String url) {
+    this.url = url;
   }
 
-  public String getPermalink() {
-    return permalink;
+  public int getPageSize() {
+    return pageSize;
   }
 
-  public void setPermalink(String permalink) {
-    this.permalink = permalink;
+  public void setPageSize(int pageSize) {
+    this.pageSize = pageSize;
   }
 
-  public String getExcerpt_separator() {
-    return excerpt_separator;
+  public String getPermaLink() {
+    return permaLink;
   }
 
-  public void setExcerpt_separator(String excerpt_separator) {
-    this.excerpt_separator = excerpt_separator;
+  public void setPermaLink(String permaLink) {
+    this.permaLink = permaLink;
   }
 
-  public Map getLinks() {
-    return links;
+  public String getExcerptSeparator() {
+    return excerptSeparator;
   }
 
-  public void setLinks(Map links) {
-    this.links = links;
-  }
-
-  public Map getContacts() {
-    return contacts;
-  }
-
-  public void setContacts(Map contacts) {
-    this.contacts = contacts;
+  public void setExcerptSeparator(String excerptSeparator) {
+    this.excerptSeparator = excerptSeparator;
   }
 
   public String getPost() {
@@ -120,11 +80,51 @@ public class SiteConfig {
     this.post = post;
   }
 
-  public String getStatic_html() {
-    return static_html;
+  public String getStaticHtml() {
+    return staticHtml;
   }
 
-  public void setStatic_html(String static_html) {
-    this.static_html = static_html;
+  public void setStaticHtml(String staticHtml) {
+    this.staticHtml = staticHtml;
+  }
+
+  public Map<String, Object> getLinks() {
+    return links;
+  }
+
+  public void setLinks(Map<String, Object> links) {
+    this.links = links;
+  }
+
+  public Map<String, Object> getContacts() {
+    return contacts;
+  }
+
+  public void setContacts(Map<String, Object> contacts) {
+    this.contacts = contacts;
+  }
+
+  public Map<String, Object> getAnalytics() {
+    return analytics;
+  }
+
+  public void setAnalytics(Map<String, Object> analytics) {
+    this.analytics = analytics;
+  }
+
+  public Map<String, Object> getComment() {
+    return comment;
+  }
+
+  public void setComment(Map<String, Object> comment) {
+    this.comment = comment;
+  }
+
+  public Map<String, Object> getOther() {
+    return other;
+  }
+
+  public void setOther(Map<String, Object> other) {
+    this.other = other;
   }
 }

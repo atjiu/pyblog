@@ -11,10 +11,10 @@
     - [安装环境](#安装环境)
     - [基本用法](#基本用法)
     - [目录结构](#目录结构)
-	- [配置](#配置)
+    - [配置](#配置)
 - [博客内容](#博客内容)
     - [头信息](#头信息)
-	- [编写博客](#编写博客)
+    - [编写博客](#编写博客)
 - [个性化](#个性化)
     - [模板](#模板)
     - [模板静态资源文件](#模板静态资源文件)
@@ -22,9 +22,6 @@
     - [常用模板标签](#常用模板标签)
         - [markdown](#markdown)
         - [blogs_tag](#blogs_tag)
-        - [tags_tag](#tags_tag)
-        - [categories_tag](#categories_tag)
-        - [blog_tag](#blog_tag)
     - [对象结构](#对象结构)
         - [Blog](#blog)
         - [Page](#page)
@@ -72,35 +69,36 @@ pyblog只需要一个java运行环境，关于java运行环境怎么配置的问
 └── templates
 ```
 
-| 名称 | 解释 |
-| --- | --- |
-| `application.yml` | pyblog唯一配置文件，配置站点的各种信息 |
-| `_posts` | 博客原文件存放位置，在application.yml里可以配置成其它名字 |
-| `pyblog.jar` | 主程序，无需关注 |
-| `shutdown.sh` | 关闭服务脚本 |
-| `_site` | 发布的静态页面存放位置 |
-| `start.sh` | 启动服务脚本 |
-| `static` | 模板文件里使用的静态文件存放位置 |
-| `templates` | 模板文件存在位置，默认是default(default模板位于pyblog.jar里，无法修改)，可以添加自己喜欢的其它模板，生成不同风格的博客 |
+| 名称                | 解释                                   |
+| ----------------- | ------------------------------------ |
+| `application.yml` | pyblog唯一配置文件，配置站点的各种信息               |
+| `_posts`          | 博客原文件存放位置，在application.yml里可以配置成其它名字 |
+| `pyblog.jar`      | 主程序，无需关注                             |
+| `shutdown.sh`     | 关闭服务脚本                               |
+| `_site`           | 发布的静态页面存放位置                          |
+| `start.sh`        | 启动服务脚本                               |
+| `static`          | 模板文件里使用的静态文件存放位置                     |
+| `templates`       | 模板文件存在位置，可以添加自己喜欢的其它模板，生成不同风格的博客     |
 
 ## 配置
 
-| 名称 | 解释| 
-|---|---|
-| `server.port` | 服务端口 |
-| `debug` | 是否为开发模式，如果是的话，那么修改 templates 下的文件会即时更新博客页面，仅在开发博客模板的时候开启 |
-| `theme` | 主题（既博客模板）默认是default(default模板位于pyblog.jar里，无法修改)，可以添加自己喜欢的其它模板，生成不同风格的博客 |
-| `url` | 站点访问地址，后面不带 `/`，否则博客链接中会出现 `//` 的现象 |
-| `permalink` | 博客链接风格，默认为 `/:year/:month/:day/:title/` 也就是 _posts 文件夹里文件名字里的 `年/月/日/标题`，请务必写成这样的形式，以防发布的博客页面被覆盖的现象发生 |
-| `excerpt_separator` | 博客原文里分割出的摘要，在博客列表里展示用的，默认为四次换行 |
-| `page_size` | 博客列表每页显示的条数 |
-| `post` | 博客原文存放文件夹的名称 |
-| `static_html` | 发布的静态页面存放位置名称 |
-| `base.xx` | 站点里的相关配置，可以写任何内容，在模板里直接通过 ${_site.base.xx}取值展示就可以了 |
-| `links.xx` | 友情链接，跟base配置一样，可以写任何内容，在模板里直接通过 ${_site.links.xx}取值展示就可以了 |
-| `contacts.xx` | 博主的联系方式，跟base配置一样，可以写任何内容，在模板里直接通过 ${_site.contacts.xx}取值展示就可以了 |
-| `analytics.xx` | 博客访问统计方式，跟base配置一样，可以写任何内容，在模板里直接通过 ${_site.analytics.xx}取值展示就可以了 |
-| `comment.xx` | 博客评论方式，跟base配置一样，可以写任何内容，在模板里直接通过 ${_site.comment.xx}取值展示就可以了 |
+| 名称                  | 解释                                       |
+| ------------------- | ---------------------------------------- |
+| `server.port`       | 服务端口                                     |
+| `debug`             | 是否为开发模式，如果是的话，那么修改 templates 下的文件会即时更新博客页面，仅在开发博客模板的时候开启 |
+| `theme`             | 主题（既博客模板）默认是default(default模板位于pyblog.jar里，无法修改)，可以添加自己喜欢的其它模板，生成不同风格的博客 |
+| `url`               | 站点访问地址，后面不带 `/`，否则博客链接中会出现 `//` 的现象      |
+| `permalink`         | 博客链接风格，默认为 `/:year/:month/:day/:title/` 也就是 _posts 文件夹里文件名字里的 `年/月/日/标题`，请务必写成这样的形式，以防发布的博客页面被覆盖的现象发生 |
+| `excerpt_separator` | 博客原文里分割出的摘要，在博客列表里展示用的，默认为四次换行           |
+| `page_size`         | 博客列表每页显示的条数                              |
+| `post`              | 博客原文存放文件夹的名称                             |
+| `static_html`       | 发布的静态页面存放位置名称                            |
+| `page`              | 是否使用分页                                   |
+| `links.xx`          | 友情链接，跟base配置一样，可以写任何内容，在模板里直接通过 ${_site.links.xx}取值展示就可以了 |
+| `contacts.xx`       | 博主的联系方式，跟base配置一样，可以写任何内容，在模板里直接通过 ${_site.contacts.xx}取值展示就可以了 |
+| `analytics.xx`      | 博客访问统计方式，跟base配置一样，可以写任何内容，在模板里直接通过 ${_site.analytics.xx}取值展示就可以了 |
+| `comment.xx`        | 博客评论方式，跟base配置一样，可以写任何内容，在模板里直接通过 ${_site.comment.xx}取值展示就可以了 |
+| `other.xx`          | 其它变量，可自行配置，跟base配置一样，可以写任何内容，在模板里直接通过 ${_site.other.xx}取值展示就可以了 |
 
 # 博客内容
 
@@ -118,13 +116,13 @@ title: hello world
 
 在这两行的三虚线之间，你可以设置预定义的变量，变量有以下几种：
 
-| 名称 | 解释| 
-|---|---|
-| `title` | 博客标题，必需 |
-| `date` | 博客日期，如果没有，以博客文件前的日期为博客发布的日期 |
-| `author` | 博客发布者名称 |
-| `tags` | 博客的标签，以空格分割，可以写多个 |
-| `categories` | 博客的分类，以空格分割，可以写多个 |
+| 名称           | 解释                          |
+| ------------ | --------------------------- |
+| `title`      | 博客标题，必需                     |
+| `date`       | 博客日期，如果没有，以博客文件前的日期为博客发布的日期 |
+| `author`     | 博客发布者名称                     |
+| `tags`       | 博客的标签，以空格分割，可以写多个           |
+| `categories` | 博客的分类，以空格分割，可以写多个           |
 
 **注意，博客文件请使用UTF-8编码格式**
 
@@ -149,17 +147,20 @@ templates/
 └── default
     ├── 404.ftl
     ├── archive.ftl
+    ├── blog.ftl
     ├── category.ftl
-    ├── detail.ftl
-    ├── footer.ftl
-    ├── header.ftl
     ├── index.ftl
-    ├── layout.ftl
-    ├── paginate.ftl
+    ├── layout
+    │   ├── footer.ftl
+    │   ├── header.ftl
+    │   ├── layout.ftl
+    │   └── paginate.ftl
     └── tag.ftl
 ```
 
-**注意：archive.ftl, category.ftl, detail.ftl, index.ftl, tag.ftl 这几个文件的名称是固定的，不能修改成其它名字**
+**注意：archive.ftl, category.ftl, blog.ftl, index.ftl, tag.ftl 这几个文件的名称是固定的，不能修改成其它名字**，其它文件名字可以自行定义，生成的页面就是你设置的文件名，后缀为html
+
+例如：example.ftl -> example.html
 
 这样就可以开发自己的模板了，风格可以完全自己定
 
@@ -173,16 +174,17 @@ templates/
 
 开发模板的时候要用到的变量汇总
 
-| 名称 | 解释| 
-|---|---|
-| `_site.theme` | 获取到使用的模板名 |
-| `_site.url` | 站点的访问域名（后面不带`/`） |
-| `_site.page_size` | 获取每页显示的博客条数 |
-| `_site.base.xx` | 获取博客站点的设置信息，配置了什么就可以取什么，比如：`_site.base.title` `_site.base.brief_intro` `_site.base.description_footer` |
-| `_site.links.xx` | 获取博客站点的友链信息，配置了什么就可以取什么 |
-| `_site.contacts.xx` | 获取博主的联系方式，配置了什么就可以取什么 |
-| `_site.analytics.xx` | 获取统计信息，配置了什么就可以取什么 |
-| `_site.comment.xx` | 获取评论的配置信息，配置了什么就可以取什么 |
+| 名称                   | 解释                       |
+| -------------------- | ------------------------ |
+| `_site.theme`        | 获取到使用的模板名                |
+| `_site.url`          | 站点的访问域名（后面不带`/`）         |
+| `_site.page_size`    | 获取每页显示的博客条数              |
+| `_site.page`         | 获取是否使用分页                 |
+| `_site.links.xx`     | 获取博客站点的友链信息，配置了什么就可以取什么  |
+| `_site.contacts.xx`  | 获取博主的联系方式，配置了什么就可以取什么    |
+| `_site.analytics.xx` | 获取统计信息，配置了什么就可以取什么       |
+| `_site.comment.xx`   | 获取评论的配置信息，配置了什么就可以取什么    |
+| `_site.other.xx`     | 获取其它自定义的配置信息，配置了什么就可以取什么 |
 
 ## 常用模板标签
 
@@ -197,121 +199,47 @@ templates/
 `${markdown.pegDown(blog.content)}`
 
 ### blogs_tag
- 
-说明：获取所有博客的标签，**在index.ftl页面里可以直接通过${pageNo}的方式取到pageNo**
 
-参数：pageNo 页数，如果传了pageNo 会返回当前页数的分布对象`page`，如果没有传pageNo，将返回所有的博客列表
+说明：获取所有博客的标签
+
+参数：无
 
 用法：
 
 ```html
-<!--不传pageNo的用法-->
 <@blogs_tag>
   <#list blogs as blog>
     <p>${blog.title}</p>
   </#list>
 </#list>
 </@blogs_tag>
-
-<!--传pageNo的用法-->
-<@blogs_tag pageNo=1>
-  <#list page.list as blog>
-    <p>${blog.title}</p>
-  </#list>
-  <p>总页数：${page.totalPage} 总条数：${page.totalCount}</p>
-</#list>
-</@blogs_tag>
-```
-
-### tags_tag
-
-说明：标签列表标签
-
-参数：无
-
-用法：
-
-```html
-<@tags_tag>
-  <#list tags as tag>
-    <div class="page-header">
-      <h2>${tag.name}</h2>
-    </div>
-    <ul>
-      <#list tag.blogs as blog>
-        <li class="lead">
-          <a href="${blog.url!}index.html">${blog.title!}</a>
-        </li>
-      </#list>
-    </ul>
-  </#list>
-</@tags_tag>
-```
-
-### categories_tag
-
-说明：类别列表标签
-
-参数：无
-
-用法：
-
-```html
-<@categories_tag>
-  <#list categories as category>
-    <div class="page-header">
-      <h2>${category.name}</h2>
-    </div>
-    <ul>
-      <#list category.blogs as blog>
-        <li class="lead">
-          <a href="${blog.url!}index.html">${blog.title!}</a>
-        </li>
-      </#list>
-    </ul>
-  </#list>
-</@categories_tag>
-```
-
-### blog_tag
-
-说明：博客详情标签
-
-参数：url，就是Blog里的url字段，类似：/2017/07/11/hello-world/
-
-用法：
-
-```html
-<@blog_tag url="/2017/07/11/hello-world/">
-  <div class="page-header">
-    <h2>${blog.title}</h2>
-  </div>
-</@blog_tag>
 ```
 
 ## 对象结构
 
 ### Blog
 
-| 名称 | 类型 | 解释 |
-| --- | --- | --- |
-| title | String | 博客标题 |
-| excerpt | String | 博客摘要 |
-| content | String | 博客内容 |
-| url | String | 博客详情的访问链接，类似：/2017/07/11/hello-world/ |
-| date | String | 博客发布日期，如果头信息里没有写上date属性的话，就会取文件名字上的日期作为博客发布时间 |
-| author | String | 博客发布者 |
-| categories | List<String> | 博客的类别 |
-| tags | List<String> | 博客的标签 |
+| 名称         | 类型           | 解释                                       |
+| ---------- | ------------ | ---------------------------------------- |
+| title      | String       | 博客标题                                     |
+| excerpt    | String       | 博客摘要                                     |
+| content    | String       | 博客内容                                     |
+| url        | String       | 博客详情的访问链接，类似：/2017/07/11/hello-world/    |
+| date       | String       | 博客发布日期，如果头信息里没有写上date属性的话，就会取文件名字上的日期作为博客发布时间 |
+| author     | String       | 博客发布者                                    |
+| categories | List<String> | 博客的类别                                    |
+| tags       | List<String> | 博客的标签                                    |
+| previous   | Blog         | 当前博客的上一篇                                 |
+| next       | Blog         | 当前博客的下一篇                                 |
 
 ### Page
 
-| 名称 | 类型 | 解释 |
-| --- | --- | --- |
-| pageNo | int | 当前页 |
-| pageSize | int | 每页显示的条数 |
-| list | List<Blog> | 当前页的博客列表 |
-| firstPage | boolean | 是否是第一页 |
-| lastPage | boolean | 是否是最后一页 |
-| totalPage | int | 总页数 |
-| totalCount | int | 总条数 |
+| 名称         | 类型         | 解释       |
+| ---------- | ---------- | -------- |
+| pageNo     | int        | 当前页      |
+| pageSize   | int        | 每页显示的条数  |
+| list       | List<Blog> | 当前页的博客列表 |
+| firstPage  | boolean    | 是否是第一页   |
+| lastPage   | boolean    | 是否是最后一页  |
+| totalPage  | int        | 总页数      |
+| totalCount | int        | 总条数      |

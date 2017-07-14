@@ -47,7 +47,7 @@ public class FileUtil {
         file.createNewFile();
       }
     } catch (IOException e) {
-      log.error(e.getMessage());
+      e.printStackTrace();
     }
     return file;
   }
@@ -77,8 +77,9 @@ public class FileUtil {
           return new Date();
         }
       });
-      for (File file : fileDirs) {
+      for (int i = 0; i < fileDirs.length; i++) {
         try {
+          File file = fileDirs[i];
           Blog blog = new Blog();
 
           String fileName = file.getName();
@@ -181,9 +182,22 @@ public class FileUtil {
 
           blogs.add(blog);
         } catch (IOException | IllegalArgumentException e) {
-          log.error(e.getMessage());
+          e.printStackTrace();
         }
-
+      }
+      for(int i = 0; i < blogs.size(); i++) {
+        Blog blog = blogs.get(i);
+        // previous and next
+        if (blogs.size() > 1) {
+          if (i == 0) {
+            blog.setNext(blogs.get(i+1));
+          } else if (i == blogs.size() - 1) {
+            blog.setPrevious(blogs.get(i - 1));
+          } else {
+            blog.setNext(blogs.get(i + 1));
+            blog.setPrevious(blogs.get(i - 1));
+          }
+        }
       }
     }
   }
@@ -196,9 +210,20 @@ public class FileUtil {
         allTags.addAll(blog.getTags());
       }
     }
-
     // Duplicate removal
     return duplicateRemoval(allTags);
+  }
+  public Map assemblyTag(String tag) {
+    Map map1 = new HashMap();
+    List<Blog> blog1 = new ArrayList<>();
+    for(Blog blog: blogs) {
+      if(blog.getTags().contains(tag)) {
+        blog1.add(blog);
+      }
+    }
+    map1.put("name", tag);
+    map1.put("blogs", blog1);
+    return map1;
   }
 
   public List<String> getCategories() {
@@ -209,9 +234,21 @@ public class FileUtil {
         allCategories.addAll(blog.getCategories());
       }
     }
-
     // Duplicate removal
     return duplicateRemoval(allCategories);
+  }
+
+  public Map assemblyCategory(String catetory) {
+    Map map1 = new HashMap();
+    List<Blog> blog1 = new ArrayList<>();
+    for(Blog blog: blogs) {
+      if(blog.getCategories().contains(catetory)) {
+        blog1.add(blog);
+      }
+    }
+    map1.put("name", catetory);
+    map1.put("blogs", blog1);
+    return map1;
   }
 
   // Duplicate removal

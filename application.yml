@@ -1,5 +1,7 @@
 server:
   port: 4000
+banner:
+  location: file:banner.txt
 spring:
   resources:
     static-locations:
@@ -19,10 +21,12 @@ _site:
   theme: default
   url: http://localhost:4000
   permaLink: /:year/:month/:day/:title/
-  excerptSeparator: "\n\n\n\n"
+  excerptSeparator: \n\n\n\n
   pageSize: 10
   post: ./_posts
   staticHtml: ./_sites
+  page: false
+  rss: true
 #  links:
 #    Github: https://github.com/
 #    Google: https://google.com/

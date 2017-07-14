@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -41,25 +42,126 @@ public class GeneratorHtml {
   public void generator() {
     clean();
     log.info("start generator html...");
-    generatorIndex();
-    generatorPage();
-    generatorTag();
-    generatorTagByName();
-    generatorCategory();
-    generatorCategoryByName();
-    generatorDetail();
-    generatorArchives();
-    generator404Page();
-    generatorRss();
+    File templateFiles = new File("./templates/" + siteConfig.getTheme());
+    if (!templateFiles.exists()) {
+      log.error("Not found templates!");
+    } else {
+      int pageSize = siteConfig.getPageSize();
+      File[] templates = templateFiles.listFiles();
+      if (templates != null) {
+        for (File file : templates) {
+          String fileName = file.getName();
+          if (fileName.contains(".ftl")) {
+            if (fileName.equals("index.ftl")) {
+              List<Blog> blogs = fileUtil.getBlogs();
+              if (siteConfig.isPage()) {
+                // index.html
+                int toIndex = pageSize;
+                if (toIndex > blogs.size()) toIndex = blogs.size();
+                Page page = new Page(1, pageSize, blogs.size(), blogs.subList(0, toIndex));
+                generatorHtml(siteConfig.getStaticHtml(), null, fileName, "page", page);
+
+                // page html
+                for (int i = 1; i <= page.getTotalPage(); i++) {
+                  try {
+                    int toIndex1 = (i - 1) * pageSize + pageSize;
+                    if (toIndex1 > blogs.size()) toIndex1 = blogs.size();
+                    Page page1 = new Page(i, pageSize, blogs.size(), blogs.subList((i - 1) * pageSize, toIndex1));
+                    generatorHtml(siteConfig.getStaticHtml() + "/page" + i, null, fileName, "page", page1);
+                  } catch (Exception e) {
+                    e.printStackTrace();
+                  }
+                }
+              } else {
+                // index.html
+                generatorHtml(siteConfig.getStaticHtml(), null, fileName, "blogs", blogs);
+              }
+            } else if (fileName.equals("blog.ftl")) {
+              for (Blog blog : fileUtil.getBlogs()) {
+                try {
+                  String url = blog.getUrl();
+                  String[] urls = url.split("/");
+                  if (urls.length < 2) {
+                    log.error("The URL address is not valid!");
+                  } else {
+                    generatorHtml(siteConfig.getStaticHtml() + blog.getUrl(), null, fileName, "blog", blog);
+                  }
+                } catch (Exception e) {
+                  e.printStackTrace();
+                }
+              }
+            } else if (fileName.equals("tag.ftl")) {
+              // all tag
+              List<Map> tags = new ArrayList<>();
+              for (String tag : fileUtil.getTags()) {
+                try {
+                  Map map = fileUtil.assemblyTag(tag);
+                  // tag by name
+                  List<Map> tags1 = new ArrayList<>();
+                  tags1.add(map);
+                  generatorHtml(siteConfig.getStaticHtml() + "/tag/" + tag, null, fileName, "tags", tags1);
+                  tags.add(map);
+                } catch (Exception e) {
+                  e.printStackTrace();
+                }
+              }
+              generatorHtml(siteConfig.getStaticHtml() + "/tag", null, fileName, "tags", tags);
+            } else if (fileName.equals("category.ftl")) {
+              // all category
+              List<Map> categories = new ArrayList<>();
+              for (String category : fileUtil.getCategories()) {
+                try {
+                  Map map = fileUtil.assemblyCategory(category);
+                  // category by name
+                  List<Map> categories1 = new ArrayList<>();
+                  categories1.add(map);
+                  generatorHtml(siteConfig.getStaticHtml() + "/category/" + category, null, fileName, "categories", categories1);
+                  categories.add(map);
+                } catch (Exception e) {
+                  e.printStackTrace();
+                }
+              }
+              generatorHtml(siteConfig.getStaticHtml() + "/category", null, fileName, "categories", categories);
+            } else if (fileName.equals("archive.ftl")) {
+              List<Blog> blogs = fileUtil.getBlogs();
+              if (siteConfig.isPage()) {
+                // archive html
+                int toIndex = pageSize;
+                if (toIndex > blogs.size()) toIndex = blogs.size();
+                Page page = new Page(1, pageSize, blogs.size(), blogs.subList(0, toIndex));
+                generatorHtml(siteConfig.getStaticHtml() + "/archive", null, fileName, "page", page);
+
+                // archive page html
+                for (int i = 1; i <= page.getTotalPage(); i++) {
+                  try {
+                    int toIndex1 = (i - 1) * pageSize + pageSize;
+                    if (toIndex1 > blogs.size()) toIndex1 = blogs.size();
+                    Page page1 = new Page(i, pageSize, blogs.size(), blogs.subList((i - 1) * pageSize, toIndex1));
+                    generatorHtml(siteConfig.getStaticHtml() + "/archive/page" + i, null, fileName, "page", page1);
+                  } catch (Exception e) {
+                    e.printStackTrace();
+                  }
+                }
+              } else {
+                // archive html
+                generatorHtml(siteConfig.getStaticHtml() + "/archive", null, fileName, "blogs", blogs);
+              }
+            } else {
+              String htmlName = fileName.substring(0, fileName.lastIndexOf("."));
+              generatorHtml(siteConfig.getStaticHtml(), htmlName, fileName, null, null);
+            }
+          }
+        }
+      }
+    }
+    if (siteConfig.isRss()) generatorRss();
     log.info("generator over!");
   }
 
   public void clean() {
     log.info("start clean blog data...");
-
     fileUtil.getBlogs().clear();
     fileUtil.formatter();
-
     log.info("clean blog data end...");
 
     log.info("start clean html...");
@@ -68,236 +170,26 @@ public class GeneratorHtml {
     log.info("clean html end...");
   }
 
-  public void generatorIndex() {
+  public void generatorHtml(String dir, String htmlName, String templateFile, String attrName, Object attrValue) {
     try {
-      Template template = configuration.getTemplate(siteConfig.getTheme() + "/index.ftl");
-      fileUtil.mkdir(siteConfig.getStaticHtml());
-
-      File staticFile = fileUtil.createFile(siteConfig.getStaticHtml() + "/index.html");
+      if (StringUtils.isEmpty(htmlName)) htmlName = "index.html";
+      fileUtil.mkdirs(dir);
+      File staticFile = fileUtil.createFile(dir + "/" + htmlName);
 
       FileOutputStream outStream = new FileOutputStream(staticFile);
       OutputStreamWriter writer = new OutputStreamWriter(outStream, "UTF-8");
       BufferedWriter sw = new BufferedWriter(writer);
 
-      Map<String, String> rootMap = new HashMap<>();
-      rootMap.put("page_tab", "home");
-      rootMap.put("pageNo", "1");
+      Map rootMap = new HashMap();
+      if (!StringUtils.isEmpty(attrName)) rootMap.put(attrName, attrValue);
 
+      Template template = configuration.getTemplate(siteConfig.getTheme() + "/" + templateFile);
       template.process(rootMap, sw);
       sw.flush();
       sw.close();
       outStream.close();
     } catch (IOException | TemplateException e) {
-      log.error(e.getMessage());
-    }
-  }
-
-  public void generatorPage() {
-    Page page = new Page(1, siteConfig.getPageSize(), fileUtil.getBlogs().size(), fileUtil.getBlogs());
-    for (int i = 1; i <= page.getTotalPage(); i++) {
-      try {
-        Template template = configuration.getTemplate(siteConfig.getTheme() + "/index.ftl");
-        fileUtil.mkdir(siteConfig.getStaticHtml() + "/page" + i);
-
-        File staticFile = fileUtil.createFile(siteConfig.getStaticHtml() + "/page" + i + "/index.html");
-
-        FileOutputStream outStream = new FileOutputStream(staticFile);
-        OutputStreamWriter writer = new OutputStreamWriter(outStream, "UTF-8");
-        BufferedWriter sw = new BufferedWriter(writer);
-
-        Map<String, String> rootMap = new HashMap<>();
-        rootMap.put("page_tab", "home");
-        rootMap.put("pageNo", String.valueOf(i));
-
-        template.process(rootMap, sw);
-        sw.flush();
-        sw.close();
-        outStream.close();
-      } catch (IOException | TemplateException e) {
-        log.error(e.getMessage());
-      }
-    }
-  }
-
-  public void generatorTag() {
-    try {
-      Template template = configuration.getTemplate(siteConfig.getTheme() + "/tag.ftl");
-      fileUtil.mkdir(siteConfig.getStaticHtml() + "/tag");
-
-      File staticFile = fileUtil.createFile(siteConfig.getStaticHtml() + "/tag/index.html");
-
-      FileOutputStream outStream = new FileOutputStream(staticFile);
-      OutputStreamWriter writer = new OutputStreamWriter(outStream, "UTF-8");
-      BufferedWriter sw = new BufferedWriter(writer);
-
-      Map<String, String> rootMap = new HashMap<>();
-      rootMap.put("page_tab", "tag");
-
-      template.process(rootMap, sw);
-      sw.flush();
-      sw.close();
-      outStream.close();
-    } catch (IOException | TemplateException e) {
-      log.error(e.getMessage());
-    }
-  }
-
-  public void generatorTagByName() {
-    List<String> tags = fileUtil.getTags();
-    if (tags != null) {
-      for (String tag : tags) {
-        try {
-          Template template = configuration.getTemplate(siteConfig.getTheme() + "/tag.ftl");
-          fileUtil.mkdirs(siteConfig.getStaticHtml() + "/tag/" + tag);
-
-          File staticFile = fileUtil.createFile(siteConfig.getStaticHtml() + "/tag/" + tag + "/index.html");
-
-          FileOutputStream outStream = new FileOutputStream(staticFile);
-          OutputStreamWriter writer = new OutputStreamWriter(outStream, "UTF-8");
-          BufferedWriter sw = new BufferedWriter(writer);
-
-          Map<String, String> rootMap = new HashMap<>();
-          rootMap.put("page_tab", "tag");
-          rootMap.put("tag", tag);
-
-          template.process(rootMap, sw);
-          sw.flush();
-          sw.close();
-          outStream.close();
-        } catch (IOException | TemplateException e) {
-          log.error(e.getMessage());
-        }
-      }
-    }
-  }
-
-  public void generatorCategory() {
-    try {
-      Template template = configuration.getTemplate(siteConfig.getTheme() + "/category.ftl");
-      fileUtil.mkdir(siteConfig.getStaticHtml() + "/category");
-
-      File staticFile = fileUtil.createFile(siteConfig.getStaticHtml() + "/category/index.html");
-
-      FileOutputStream outStream = new FileOutputStream(staticFile);
-      OutputStreamWriter writer = new OutputStreamWriter(outStream, "UTF-8");
-      BufferedWriter sw = new BufferedWriter(writer);
-
-      Map<String, String> rootMap = new HashMap<>();
-      rootMap.put("page_tab", "category");
-
-      template.process(rootMap, sw);
-      sw.flush();
-      sw.close();
-      outStream.close();
-    } catch (IOException | TemplateException e) {
-      log.error(e.getMessage());
-    }
-  }
-
-  public void generatorCategoryByName() {
-    List<String> categories = fileUtil.getCategories();
-    if (categories != null) {
-      for (String category : categories) {
-        try {
-          Template template = configuration.getTemplate(siteConfig.getTheme() + "/category.ftl");
-          fileUtil.mkdirs(siteConfig.getStaticHtml() + "/category/" + category);
-
-          File staticFile = fileUtil.createFile(siteConfig.getStaticHtml() + "/category/" + category + "/index.html");
-
-          FileOutputStream outStream = new FileOutputStream(staticFile);
-          OutputStreamWriter writer = new OutputStreamWriter(outStream, "UTF-8");
-          BufferedWriter sw = new BufferedWriter(writer);
-
-          Map<String, String> rootMap = new HashMap<>();
-          rootMap.put("page_tab", "category");
-          rootMap.put("category", category);
-
-          template.process(rootMap, sw);
-          sw.flush();
-          sw.close();
-          outStream.close();
-        } catch (IOException | TemplateException e) {
-          log.error(e.getMessage());
-        }
-      }
-    }
-  }
-
-  public void generatorArchives() {
-    try {
-      Template template = configuration.getTemplate(siteConfig.getTheme() + "/archive.ftl");
-      fileUtil.mkdir(siteConfig.getStaticHtml() + "/archive");
-
-      File staticFile = fileUtil.createFile(siteConfig.getStaticHtml() + "/archive/index.html");
-
-      FileOutputStream outStream = new FileOutputStream(staticFile);
-      OutputStreamWriter writer = new OutputStreamWriter(outStream, "UTF-8");
-      BufferedWriter sw = new BufferedWriter(writer);
-
-      Map<String, String> rootMap = new HashMap<>();
-      rootMap.put("page_tab", "archive");
-
-      template.process(rootMap, sw);
-      sw.flush();
-      sw.close();
-      outStream.close();
-    } catch (IOException | TemplateException e) {
-      log.error(e.getMessage());
-    }
-  }
-
-  public void generatorDetail() {
-    List<Blog> blogs = fileUtil.getBlogs();
-    if (blogs != null) {
-      for (Blog blog : blogs) {
-        try {
-          String url = blog.getUrl();
-          String[] urls = url.split("/");
-          if (urls.length < 2) throw new Exception("The URL address is not valid!");
-
-          Template template = configuration.getTemplate(siteConfig.getTheme() + "/detail.ftl");
-          fileUtil.mkdirs(siteConfig.getStaticHtml() + blog.getUrl());
-
-          File staticFile = fileUtil.createFile(siteConfig.getStaticHtml() + blog.getUrl() + "/index.html");
-
-          FileOutputStream outStream = new FileOutputStream(staticFile);
-          OutputStreamWriter writer = new OutputStreamWriter(outStream, "UTF-8");
-          BufferedWriter sw = new BufferedWriter(writer);
-
-          Map<String, String> rootMap = new HashMap<>();
-          rootMap.put("page_tab", "");
-          rootMap.put("url", url);
-
-          template.process(rootMap, sw);
-          sw.flush();
-          sw.close();
-          outStream.close();
-        } catch (Exception e) {
-          log.error(e.getMessage());
-        }
-      }
-    }
-  }
-
-  public void generator404Page() {
-    try {
-      Template template = configuration.getTemplate(siteConfig.getTheme() + "/404.ftl");
-      fileUtil.mkdir(siteConfig.getStaticHtml() + "/archive");
-
-      File staticFile = fileUtil.createFile(siteConfig.getStaticHtml() + "/404.html");
-
-      FileOutputStream outStream = new FileOutputStream(staticFile);
-      OutputStreamWriter writer = new OutputStreamWriter(outStream, "UTF-8");
-      BufferedWriter sw = new BufferedWriter(writer);
-
-      Map<String, String> rootMap = new HashMap<>();
-
-      template.process(rootMap, sw);
-      sw.flush();
-      sw.close();
-      outStream.close();
-    } catch (IOException | TemplateException e) {
-      log.error(e.getMessage());
+      e.printStackTrace();
     }
   }
 
@@ -348,7 +240,7 @@ public class GeneratorHtml {
               }
               entries.add(syndEntry);
             } catch (Exception e) {
-              log.error(e.getMessage());
+              e.printStackTrace();
             }
           }
         }
@@ -362,7 +254,7 @@ public class GeneratorHtml {
       fw.flush();
       fw.close();
     } catch (FeedException | IOException e) {
-      log.error(e.getMessage());
+      e.printStackTrace();
     }
   }
 }

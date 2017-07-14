@@ -25,7 +25,7 @@ public class DateUtil {
     try {
       date = strToDate.parse(dateString);
     } catch (ParseException e) {
-      log.error(e.getMessage());
+      e.printStackTrace();
     }
     return date;
   }

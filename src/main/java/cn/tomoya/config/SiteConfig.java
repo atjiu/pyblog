@@ -22,11 +22,29 @@ public class SiteConfig {
   private String excerptSeparator;
   private String post;
   private String staticHtml;
+  private boolean page;
+  private boolean rss;
   private Map<String, Object> links;
   private Map<String, Object> contacts;
   private Map<String, Object> analytics;
   private Map<String, Object> comment;
   private Map<String, Object> other;
+
+  public boolean isRss() {
+    return rss;
+  }
+
+  public void setRss(boolean rss) {
+    this.rss = rss;
+  }
+
+  public boolean isPage() {
+    return page;
+  }
+
+  public void setPage(boolean page) {
+    this.page = page;
+  }
 
   public boolean isDebug() {
     return debug;

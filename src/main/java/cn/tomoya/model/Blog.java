@@ -16,6 +16,24 @@ public class Blog {
   private String author;
   private List<String> categories;
   private List<String> tags;
+  private Blog previous;
+  private Blog next;
+
+  public Blog getPrevious() {
+    return previous;
+  }
+
+  public void setPrevious(Blog previous) {
+    this.previous = previous;
+  }
+
+  public Blog getNext() {
+    return next;
+  }
+
+  public void setNext(Blog next) {
+    this.next = next;
+  }
 
   public String getTitle() {
     return title;

@@ -19,13 +19,13 @@
         <li <#if page_tab == 'home'>class="active"</#if>>
           <a href="/">Home</a>
         </li>
-        <li <#if page_tab == 'archives'>class="active"</#if>>
+        <li <#if page_tab == 'archive'>class="active"</#if>>
           <a href="/archive/index.html">Archives</a>
         </li>
-        <li <#if page_tab == 'categories'>class="active"</#if>>
+        <li <#if page_tab == 'category'>class="active"</#if>>
           <a href="/category/index.html">Categories</a>
         </li>
-        <li <#if page_tab == 'tags'>class="active"</#if>>
+        <li <#if page_tab == 'tag'>class="active"</#if>>
           <a href="/tag/index.html">Tags</a>
         </li>
       </ul>

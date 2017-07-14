@@ -24,4 +24,4 @@ nbdist/
 .nb-gradle/
 
 ### pyblog
-_site
+_sites

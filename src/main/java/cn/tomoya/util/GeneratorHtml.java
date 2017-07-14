@@ -16,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.*;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -186,12 +185,12 @@ public class GeneratorHtml {
 
   public void generatorDetail() {
     List<Blog> blogs = fileUtil.getBlogs();
-    if(blogs != null) {
-      for(Blog blog: blogs) {
+    if (blogs != null) {
+      for (Blog blog : blogs) {
         try {
           String url = blog.getUrl();
           String[] urls = url.split("/");
-          if(urls.length < 2) throw new Exception("The URL address is not valid!");
+          if (urls.length < 2) throw new Exception("The URL address is not valid!");
 
           Template template = configuration.getTemplate(siteConfig.getTheme() + "/detail.ftl");
           fileUtil.mkdirs(siteConfig.getStaticHtml() + blog.getUrl());

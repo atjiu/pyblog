@@ -11,6 +11,10 @@ import java.util.Map;
 public class SiteConfig {
 
   private boolean debug;
+  private String title;
+  private String subTitle;
+  private String description;
+  private String author;
   private String theme;
   private String url;
   private int pageSize;
@@ -30,6 +34,38 @@ public class SiteConfig {
 
   public void setDebug(boolean debug) {
     this.debug = debug;
+  }
+
+  public String getTitle() {
+    return title;
+  }
+
+  public void setTitle(String title) {
+    this.title = title;
+  }
+
+  public String getSubTitle() {
+    return subTitle;
+  }
+
+  public void setSubTitle(String subTitle) {
+    this.subTitle = subTitle;
+  }
+
+  public String getDescription() {
+    return description;
+  }
+
+  public void setDescription(String description) {
+    this.description = description;
+  }
+
+  public String getAuthor() {
+    return author;
+  }
+
+  public void setAuthor(String author) {
+    this.author = author;
   }
 
   public String getTheme() {

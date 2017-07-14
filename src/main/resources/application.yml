@@ -3,7 +3,7 @@ server:
 spring:
   resources:
     static-locations:
-    - file:./${_site.static_html}/
+    - file:./${_site.staticHtml}/
     - file:./static/
   freemarker:
     template-loader-path:

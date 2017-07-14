@@ -6,6 +6,7 @@ import freemarker.core.Environment;
 import freemarker.template.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -27,33 +28,32 @@ public class TagsDirective implements TemplateDirectiveModel {
                       TemplateDirectiveBody templateDirectiveBody) throws TemplateException, IOException {
     DefaultObjectWrapperBuilder builder = new DefaultObjectWrapperBuilder(Configuration.VERSION_2_3_26);
 
-    List<Blog> blogs = fileUtil.getBlogs();
-    List<String> allTags = new ArrayList<>();
+    String t = map.get("tag") == null ? null : map.get("tag").toString();
+    List<String> allTags = fileUtil.getTags();
 
-    for (Blog blog : blogs) {
-      if (blog.getTags() != null && blog.getTags().size() > 0) {
-        allTags.addAll(blog.getTags());
+    List tags = new ArrayList<>();
+    if(StringUtils.isEmpty(t)) {
+      for (String tag : allTags) {
+        tags.add(assemblyTag(tag));
       }
-    }
-
-    // Duplicate removal
-    List<String> newTags = fileUtil.duplicateRemoval(allTags);
-
-    List<Map<String, Object>> tags = new ArrayList<>();
-    for(String tag: newTags) {
-      Map map1 = new HashMap();
-      List<Blog> blog1 = new ArrayList<>();
-      for(Blog blog: blogs) {
-        if(blog.getTags().contains(tag)) {
-          blog1.add(blog);
-        }
-      }
-      map1.put("name", tag);
-      map1.put("blogs", blog1);
-      tags.add(map1);
+    } else {
+      tags.add(assemblyTag(t));
     }
 
     environment.setVariable("tags", builder.build().wrap(tags));
     templateDirectiveBody.render(environment.getOut());
+  }
+
+  public Map assemblyTag(String tag) {
+    Map map1 = new HashMap();
+    List<Blog> blog1 = new ArrayList<>();
+    for(Blog blog: fileUtil.getBlogs()) {
+      if(blog.getTags().contains(tag)) {
+        blog1.add(blog);
+      }
+    }
+    map1.put("name", tag);
+    map1.put("blogs", blog1);
+    return map1;
   }
 }

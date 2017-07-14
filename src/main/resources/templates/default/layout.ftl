@@ -18,6 +18,7 @@
     body {background-color:#eee;}
     .container img {max-width: 100%;}
     .page-header{margin-top:0}
+    .label a{color:#fff;}
     pre {padding:0;color:#fff;}
     .hljs{display:block;overflow-x:auto;padding:.5em;background:#23241f}
     .hljs,.hljs-tag,.hljs-subst{color:#f8f8f2}

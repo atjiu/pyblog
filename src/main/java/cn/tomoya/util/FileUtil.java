@@ -188,6 +188,32 @@ public class FileUtil {
     }
   }
 
+  public List<String> getTags() {
+    List<String> allTags = new ArrayList<>();
+
+    for (Blog blog : blogs) {
+      if (blog.getTags() != null && blog.getTags().size() > 0) {
+        allTags.addAll(blog.getTags());
+      }
+    }
+
+    // Duplicate removal
+    return duplicateRemoval(allTags);
+  }
+
+  public List<String> getCategories() {
+    List<String> allCategories = new ArrayList<>();
+
+    for (Blog blog : blogs) {
+      if (blog.getCategories() != null && blog.getCategories().size() > 0) {
+        allCategories.addAll(blog.getCategories());
+      }
+    }
+
+    // Duplicate removal
+    return duplicateRemoval(allCategories);
+  }
+
   // Duplicate removal
   public List<String> duplicateRemoval(List<String> list) {
     List<String> newList = new ArrayList<>();

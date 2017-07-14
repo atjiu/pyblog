@@ -2,7 +2,7 @@
 <@html title="Tags - " + _site.title page_tab=page_tab>
 <div class="panel panel-default">
   <div class="panel-body">
-    <@tags_tag>
+    <@tags_tag tag=tag>
       <#list tags as tag>
         <div class="page-header">
           <h2>${tag.name}</h2>

@@ -2,7 +2,7 @@
 <@html title="Categories - " + _site.title page_tab=page_tab>
 <div class="panel panel-default">
   <div class="panel-body">
-    <@categories_tag>
+    <@categories_tag category=category>
       <#list categories as category>
         <div class="page-header">
           <h2>${category.name}</h2>

@@ -10,8 +10,6 @@ import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import org.jdom2.CDATA;
-import org.jdom2.Content;
-import org.jdom2.Text;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +44,9 @@ public class GeneratorHtml {
     generatorIndex();
     generatorPage();
     generatorTag();
+    generatorTagByName();
     generatorCategory();
+    generatorCategoryByName();
     generatorDetail();
     generatorArchives();
     generator404Page();
@@ -142,6 +142,35 @@ public class GeneratorHtml {
     }
   }
 
+  public void generatorTagByName() {
+    List<String> tags = fileUtil.getTags();
+    if (tags != null) {
+      for (String tag : tags) {
+        try {
+          Template template = configuration.getTemplate(siteConfig.getTheme() + "/tag.ftl");
+          fileUtil.mkdirs(siteConfig.getStaticHtml() + "/tag/" + tag);
+
+          File staticFile = fileUtil.createFile(siteConfig.getStaticHtml() + "/tag/" + tag + "/index.html");
+
+          FileOutputStream outStream = new FileOutputStream(staticFile);
+          OutputStreamWriter writer = new OutputStreamWriter(outStream, "UTF-8");
+          BufferedWriter sw = new BufferedWriter(writer);
+
+          Map<String, String> rootMap = new HashMap<>();
+          rootMap.put("page_tab", "tag");
+          rootMap.put("tag", tag);
+
+          template.process(rootMap, sw);
+          sw.flush();
+          sw.close();
+          outStream.close();
+        } catch (IOException | TemplateException e) {
+          log.error(e.getMessage());
+        }
+      }
+    }
+  }
+
   public void generatorCategory() {
     try {
       Template template = configuration.getTemplate(siteConfig.getTheme() + "/category.ftl");
@@ -162,6 +191,35 @@ public class GeneratorHtml {
       outStream.close();
     } catch (IOException | TemplateException e) {
       log.error(e.getMessage());
+    }
+  }
+
+  public void generatorCategoryByName() {
+    List<String> categories = fileUtil.getCategories();
+    if (categories != null) {
+      for (String category : categories) {
+        try {
+          Template template = configuration.getTemplate(siteConfig.getTheme() + "/category.ftl");
+          fileUtil.mkdirs(siteConfig.getStaticHtml() + "/category/" + category);
+
+          File staticFile = fileUtil.createFile(siteConfig.getStaticHtml() + "/category/" + category + "/index.html");
+
+          FileOutputStream outStream = new FileOutputStream(staticFile);
+          OutputStreamWriter writer = new OutputStreamWriter(outStream, "UTF-8");
+          BufferedWriter sw = new BufferedWriter(writer);
+
+          Map<String, String> rootMap = new HashMap<>();
+          rootMap.put("page_tab", "category");
+          rootMap.put("category", category);
+
+          template.process(rootMap, sw);
+          sw.flush();
+          sw.close();
+          outStream.close();
+        } catch (IOException | TemplateException e) {
+          log.error(e.getMessage());
+        }
+      }
     }
   }
 
@@ -259,7 +317,7 @@ public class GeneratorHtml {
         feed.setPublishedDate(blogs.get(0).getDate());
         List<SyndEntry> entries = new ArrayList<>();
         for (int i = 0; i < blogs.size(); i++) {
-          if(i >= 10) {
+          if (i >= 10) {
             Blog blog = blogs.get(i);
             try {
               SyndEntry syndEntry = new SyndEntryImpl();

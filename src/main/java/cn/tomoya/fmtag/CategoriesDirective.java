@@ -6,6 +6,7 @@ import freemarker.core.Environment;
 import freemarker.template.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -27,33 +28,32 @@ public class CategoriesDirective implements TemplateDirectiveModel {
                       TemplateDirectiveBody templateDirectiveBody) throws TemplateException, IOException {
     DefaultObjectWrapperBuilder builder = new DefaultObjectWrapperBuilder(Configuration.VERSION_2_3_26);
 
-    List<Blog> blogs = fileUtil.getBlogs();
-    List<String> allCategories = new ArrayList<>();
+    String c = map.get("category") == null ? null : map.get("category").toString();
+    List<String> allCategories = fileUtil.getCategories();
 
-    for (Blog blog : blogs) {
-      if (blog.getCategories() != null && blog.getCategories().size() > 0) {
-        allCategories.addAll(blog.getCategories());
+    List categories = new ArrayList<>();
+    if(StringUtils.isEmpty(c)) {
+      for(String category: allCategories) {
+        categories.add(assemblyCategory(category));
       }
-    }
-
-    // Duplicate removal
-    List<String> newCategories = fileUtil.duplicateRemoval(allCategories);
-
-    List<Map<String, Object>> categories = new ArrayList<>();
-    for(String category: newCategories) {
-      Map map1 = new HashMap();
-      List<Blog> blog1 = new ArrayList<>();
-      for(Blog blog: blogs) {
-        if(blog.getCategories().contains(category)) {
-          blog1.add(blog);
-        }
-      }
-      map1.put("name", category);
-      map1.put("blogs", blog1);
-      categories.add(map1);
+    } else {
+      categories.add(assemblyCategory(c));
     }
 
     environment.setVariable("categories", builder.build().wrap(categories));
     templateDirectiveBody.render(environment.getOut());
+  }
+
+  public Map assemblyCategory(String catetory) {
+    Map map1 = new HashMap();
+    List<Blog> blog1 = new ArrayList<>();
+    for(Blog blog: fileUtil.getBlogs()) {
+      if(blog.getCategories().contains(catetory)) {
+        blog1.add(blog);
+      }
+    }
+    map1.put("name", catetory);
+    map1.put("blogs", blog1);
+    return map1;
   }
 }

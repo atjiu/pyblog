@@ -15,13 +15,17 @@
             <#if blog.categories??>
               <span class="glyphicon glyphicon-list"></span>
               <#list blog.categories as category>
-                <span class="label label-default">${category!}</span>&nbsp;
+                <span class="label label-default">
+                  <a href="/category/${category}/index.html">${category!}</a>
+                </span>&nbsp;
               </#list>
             </#if>
             <#if blog.tags??>
               <span class="glyphicon glyphicon-tags"></span>
               <#list blog.tags as tag>
-                <span class="label label-primary">${tag!}</span>&nbsp;
+                <span class="label label-primary">
+                  <a href="/tag/${tag}/index.html">${tag!}</a>
+                </span>&nbsp;
               </#list>
             </#if>
           </p>

@@ -3,19 +3,22 @@ package cn.tomoya.util;
 import cn.tomoya.config.SiteConfig;
 import cn.tomoya.model.Blog;
 import cn.tomoya.model.Page;
-import com.rometools.rome.feed.synd.SyndFeed;
-import com.rometools.rome.feed.synd.SyndFeedImpl;
+import com.rometools.rome.feed.synd.*;
 import com.rometools.rome.io.FeedException;
 import com.rometools.rome.io.SyndFeedOutput;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
+import org.jdom2.CDATA;
+import org.jdom2.Content;
+import org.jdom2.Text;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,6 +35,8 @@ public class GeneratorHtml {
   private SiteConfig siteConfig;
   @Autowired
   private FileUtil fileUtil;
+  @Autowired
+  private MarkdownUtil markdownUtil;
 
   Logger log = LoggerFactory.getLogger(GeneratorHtml.class);
 
@@ -45,7 +50,7 @@ public class GeneratorHtml {
     generatorDetail();
     generatorArchives();
     generator404Page();
-//    generatorRss();
+    generatorRss();
     log.info("generator over!");
   }
 
@@ -239,17 +244,67 @@ public class GeneratorHtml {
   }
 
   public void generatorRss() {
-    fileUtil.createFile(siteConfig.getStaticHtml() + "/feed.xml");
-    SyndFeed feed = new SyndFeedImpl();
-    feed.setFeedType("atom_1.0");
-    feed.setTitle("test-title");
-    feed.setDescription("test-description");
-    feed.setLink("https://example.org");
-//    feed.setEntries();
     try {
-      System.out.println(new SyndFeedOutput().outputString(feed));
-    } catch (FeedException e) {
-      e.printStackTrace();
+      File file = fileUtil.createFile(siteConfig.getStaticHtml() + "/feed.xml");
+
+      List<Blog> blogs = fileUtil.getBlogs();
+      SyndFeed feed = new SyndFeedImpl();
+      feed.setFeedType("atom_1.0");
+      feed.setTitle(siteConfig.getTitle());
+      feed.setDescription(siteConfig.getDescription());
+      feed.setAuthor(siteConfig.getAuthor());
+      feed.setUri(siteConfig.getUrl());
+      feed.setEncoding("UTF-8");
+      if (blogs.size() > 0) {
+        feed.setPublishedDate(blogs.get(0).getDate());
+        List<SyndEntry> entries = new ArrayList<>();
+        for (int i = 0; i < blogs.size(); i++) {
+          if(i >= 10) {
+            Blog blog = blogs.get(i);
+            try {
+              SyndEntry syndEntry = new SyndEntryImpl();
+              syndEntry.setTitle(blog.getTitle());
+              syndEntry.setLink(siteConfig.getUrl() + blog.getUrl() + "index.html");
+              syndEntry.setPublishedDate(blog.getDate());
+              syndEntry.setUri(siteConfig.getUrl() + blog.getUrl() + "index.html");
+              syndEntry.setAuthor(blog.getAuthor() == null ? siteConfig.getAuthor() : blog.getAuthor());
+              // content
+              List<SyndContent> contents = new ArrayList<>();
+              SyndContent syndContent = new SyndContentImpl();
+              syndContent.setValue(String.valueOf(new CDATA(markdownUtil.pegDown(blog.getContent()))));
+              syndContent.setType("text/html");
+              contents.add(syndContent);
+              syndEntry.setContents(contents);
+
+              // excerpt
+              SyndContent syndContent1 = new SyndContentImpl();
+              syndContent1.setType("text/html");
+              syndContent1.setValue(markdownUtil.pegDown(blog.getExcerpt()));
+              syndEntry.setDescription(syndContent1);
+
+              // categories
+              for (String category : blog.getCategories()) {
+                SyndCategory syndCategory = new SyndCategoryImpl();
+                syndCategory.setName(category);
+                syndCategory.setTaxonomyUri(siteConfig.getUrl() + "/category/" + category + "/index.html");
+              }
+              entries.add(syndEntry);
+            } catch (Exception e) {
+              log.error(e.getMessage());
+            }
+          }
+        }
+        feed.setEntries(entries);
+      }
+
+      String rssContent = new SyndFeedOutput().outputString(feed);
+
+      FileWriter fw = new FileWriter(file);
+      fw.write(rssContent);
+      fw.flush();
+      fw.close();
+    } catch (FeedException | IOException e) {
+      log.error(e.getMessage());
     }
   }
 }

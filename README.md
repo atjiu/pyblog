@@ -96,6 +96,7 @@ For configuration information, see the following configuration instructions
 | `post`              | The name of the original folder where the blog was stored |
 | `static_html`       | The published static page holds the location name |
 | `page`              | Whether to use paging                    |
+| `rss`               | Whether to generate feed.xml                    |
 | `links.xx`          | Links, like the base configuration, you can write any content, in the template directly through the ${_site.links.xx} value display on the |
 | `contacts.xx`       | Bloggers contact, with the base configuration, you can write any content, in the template directly through the ${_site.contacts.xx} value on the show |
 | `analytics.xx`      | Blog access statistical methods, with the base configuration, you can write any content, in the template directly through ${_site.analytics.xx} value display on the |

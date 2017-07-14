@@ -94,6 +94,7 @@ pyblog只需要一个java运行环境，关于java运行环境怎么配置的问
 | `post`              | 博客原文存放文件夹的名称                             |
 | `static_html`       | 发布的静态页面存放位置名称                            |
 | `page`              | 是否使用分页                                   |
+| `rss`               | 是否生成feed.xml |
 | `links.xx`          | 友情链接，跟base配置一样，可以写任何内容，在模板里直接通过 ${_site.links.xx}取值展示就可以了 |
 | `contacts.xx`       | 博主的联系方式，跟base配置一样，可以写任何内容，在模板里直接通过 ${_site.contacts.xx}取值展示就可以了 |
 | `analytics.xx`      | 博客访问统计方式，跟base配置一样，可以写任何内容，在模板里直接通过 ${_site.analytics.xx}取值展示就可以了 |

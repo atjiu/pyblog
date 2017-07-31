@@ -13,12 +13,12 @@ spring:
     - classpath:/templates/
 
 _site:
-  debug: true
+  debug: false
   title: Tomoya's Blog
   subTitle: Code, Animation
   description: Record my learning notes
   author: tomoya
-  theme: default
+  theme: first
   url: http://localhost:4000
   permaLink: /:year/:month/:day/:title/
   excerptSeparator: \n\n\n\n
@@ -26,7 +26,7 @@ _site:
   post: ./_posts
   staticHtml: ./_sites
   page: false
-  rss: true
+  rss: false
 #  links:
 #    Github: https://github.com/
 #    Google: https://google.com/

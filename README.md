@@ -141,7 +141,7 @@ The contents of the `excerpt_separator`, which are configured in the configurati
 
 ## Template
 
-Pyblog uses the template freemarker, the template file in the templates folder
+Pyblog uses the template freemarker, the template file in the templates folder, The layout file in the `templates/layout`, the layout file will not participate in the generation of static pages
 
 Create a folder, **name can not be default, at the same time application.yml in the theme variable should be changed to the name of the folder you create** and then the template file you create the folder, such as:
 

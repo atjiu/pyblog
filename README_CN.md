@@ -139,7 +139,7 @@ title: hello world
 
 ## 模板
 
-pyblog使用的模板为freemarker，模板文件放在templates文件夹里
+pyblog使用的模板为freemarker，模板文件放在templates文件夹里, 布局文件放在 `templates/layout` 里，布局文件不会参与生成静态页面
 
 创建一个文件夹，**名字不能为default，同时application.yml里的theme变量也要改成你创建的文件夹的名称** 然后将模板文件放到你创建的文件夹里，比如：
 

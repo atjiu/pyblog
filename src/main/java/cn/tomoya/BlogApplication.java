@@ -17,7 +17,10 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.event.ContextRefreshedEvent;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 @SpringBootApplication
 @EnableConfigurationProperties(SiteConfig.class)
@@ -48,10 +51,17 @@ public class BlogApplication extends SpringBootServletInitializer {
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
       fileUtil.mkdir(siteConfig.getPost());
       fileUtil.mkdirs("./templates/" + siteConfig.getTheme());
+      fileUtil.mkdirs("./templates/" + siteConfig.getTheme() + "/layout");
       fileUtil.formatter();
       generatorHtml.generator();
 
-      if(siteConfig.isDebug()) {
+      List<String> paths = new ArrayList<>();
+      paths.add(siteConfig.getPost());
+      if (siteConfig.isDebug()) {
+        paths.add("./templates/" + siteConfig.getTheme());
+        paths.add("./templates/" + siteConfig.getTheme() + "/layout");
+      }
+      paths.forEach((path) -> {
         try {
           DirectoryWatchService watchService = new SimpleDirectoryWatchService(); // May throw
           watchService.register(
@@ -73,43 +83,13 @@ public class BlogApplication extends SpringBootServletInitializer {
                   log.info("onFileModify onFileDelete");
                   generatorHtml.generator();
                 }
-              }, "./templates/" + siteConfig.getTheme(), "*.ftl"
+              }, path, "*.ftl"
           );
           watchService.start();
         } catch (IOException e) {
           log.error("Unable to register file change listener for ");
         }
-      }
-
-      //
-      try {
-        DirectoryWatchService watchService = new SimpleDirectoryWatchService(); // May throw
-        watchService.register(
-            new DirectoryWatchService.OnFileChangeListener() {
-              @Override
-              public void onFileCreate(String filePath) {
-                log.info("post onFileCreate");
-                generatorHtml.generator();
-              }
-
-              @Override
-              public void onFileModify(String filePath) {
-                log.info("post onFileModify");
-                generatorHtml.generator();
-              }
-
-              @Override
-              public void onFileDelete(String filePath) {
-                log.info("post onFileDelete");
-                generatorHtml.generator();
-              }
-            }, siteConfig.getPost(), "*.md", "*.markdown"
-        );
-        watchService.start();
-      } catch (IOException e) {
-        log.error("Unable to register file change listener for ");
-      }
-
+      });
     }
 
   }

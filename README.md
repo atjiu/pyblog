@@ -29,7 +29,7 @@ Similar to jekyll's java language development of static blog system
 
 ## Quick guide
 
-1. download[pyblog.tar.gz](https://github.com/tomoya92/pyblog/releases/tag/0.0.1)
+1. download[pyblog.tar.gz](https://github.com/tomoya92/pyblog/releases)
 2. decompression
 3. run start.sh `./start.sh`
 4. open browser visit: http://localhost:4000/ 

@@ -30,7 +30,7 @@
 
 ## 快速指南
 
-1. 下载[pyblog.tar.gz](https://github.com/tomoya92/pyblog/releases/tag/0.0.1)
+1. 下载[pyblog.tar.gz](https://github.com/tomoya92/pyblog/releases)
 2. 解压
 3. 运行start.sh文件 `./start.sh`
 4. 打开浏览器 http://localhost:4000/ 即可
